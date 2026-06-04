@@ -1,18 +1,12 @@
-// Check for the injected environment variable, fallback to local development path if empty
-const API_BASE = process.env.REACT_APP_BACKEND_URL 
-  ? `${process.env.REACT_APP_BACKEND_URL}/api` 
-  : 'http://127.0.0.1:8000/api';
+// Clean any potential accidental double slashes or missing trailing slashes
+const getCleanBaseUrl = () => {
+  const rawUrl = process.env.REACT_APP_BACKEND_URL || 'http://127.0.0.1:8000';
+  // Remove any trailing slash from the base URL string if it exists
+  return rawUrl.replace(/\/$/, '');
+};
 
-function getAuthHeaders() {
-  const token = localStorage.getItem('algospace_token');
-  const headers = {
-    'Content-Type': 'application/json',
-  };
-  if (token) {
-    headers.Authorization = `Token ${token}`;
-  }
-  return headers;
-}
+// Guarantee a perfectly unified absolute API endpoint prefix
+const API_BASE = `${getCleanBaseUrl()}/api`;
 
 function getAuthHeaders() {
   const token = localStorage.getItem('algospace_token');
