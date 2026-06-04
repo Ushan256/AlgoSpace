@@ -1,4 +1,18 @@
-const API_BASE = '/api';
+// Check for the injected environment variable, fallback to local development path if empty
+const API_BASE = process.env.REACT_APP_BACKEND_URL 
+  ? `${process.env.REACT_APP_BACKEND_URL}/api` 
+  : 'http://127.0.0.1:8000/api';
+
+function getAuthHeaders() {
+  const token = localStorage.getItem('algospace_token');
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+  if (token) {
+    headers.Authorization = `Token ${token}`;
+  }
+  return headers;
+}
 
 function getAuthHeaders() {
   const token = localStorage.getItem('algospace_token');
